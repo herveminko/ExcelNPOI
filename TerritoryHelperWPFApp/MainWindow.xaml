@@ -1,0 +1,114 @@
+﻿<Window x:Class="TerritoryHelperWPFApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:jibcontrols="clr-namespace:Jib.WPF.Controls.DataGrid;assembly=Jib.WPF.Controls"
+        xmlns:local="clr-namespace:TerritoryHelperWPFApp"
+        mc:Ignorable="d"
+        Title="AbigaderTerritoryHelperClient" Height="800" Width="900"
+        WindowStartupLocation="CenterScreen" 
+        WindowState="Maximized">
+    <Grid>
+        <Grid>
+            <TabControl>
+                <TabItem Header="Assemblée Locale">
+                    <StackPanel Background="#FFE5E5E5">
+                        <Button Name="publishersDownload"  Margin="0 100 0 0" Width="300" Content="Téléchargement données proclamateurs" Click="PublishersDownload_Click"  />
+                        <Button Name="assignmentsDownload" Width="300" Content="Téléchargement Attributions de territoires" Click="AssignmentsDownload_Click" />
+                        <Button Name="territoriesCardsDownload"  Width="300" Content="Téléchargement cartes de territoires" Click="TerritoriesCardsDownload_Click"/>
+                        <Button Name="addressesDownload"  Width="300" Content="Téléchargement adresses de territoires" Click="AddressesDownload_Click" />
+                    </StackPanel>
+                </TabItem>
+                <TabItem Header="Proclamateurs">
+                    <DockPanel Background="#FFE5E5E5">
+                    <Grid Background="#FFE5E5E5" RenderTransformOrigin="0.687,0.524"  >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="850" />
+                            <ColumnDefinition Width="5" />
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                            <jibcontrols:JibGrid HorizontalAlignment="Left" Name="publishersData" IsReadOnly="True" SelectionMode="Single" AutoGenerateColumns="False" Background="LightGray" RowBackground="LightYellow" AlternatingRowBackground="LightBlue" Grid.ColumnSpan="2" SelectionChanged="PublishersData_SelectedCellsChanged" LoadingRow="Datagrid_LoadingRow" CanUserFreeze="True" CanUserSelectDistinct="True" CanUserGroup="False" CanUserFilter="True"  >
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn  Binding="{Binding FirstName}" Header="Prénom"/>
+                                    <DataGridTextColumn  Binding="{Binding LastName}" Header="Nom"/>
+                                    <DataGridTextColumn  Binding="{Binding Email}" Header="Email"/>
+                                    <DataGridTextColumn  Binding="{Binding PhoneNumber}" Header="Téléphone"/>
+                                    <DataGridTextColumn  Binding="{Binding Role}" Header="Rôle"/>
+                                    <DataGridTextColumn  Binding="{Binding LastUpdate}" Header="Dernière mise à jour"/>
+                                    <DataGridTextColumn  Binding="{Binding CreationDate}" Header="Date de création"/>
+                                </DataGrid.Columns>
+                            </jibcontrols:JibGrid>
+                        <!--
+                            <DataGrid HorizontalAlignment="Left" Name="publishersData" IsReadOnly="True" ItemsSource="{Binding}" SelectionMode="Single" AutoGenerateColumns="True" Background="LightGray" RowBackground="LightYellow" AlternatingRowBackground="LightBlue" Grid.ColumnSpan="2" SelectionChanged="PublishersData_SelectedCellsChanged" LoadingRow="Datagrid_LoadingRow" />
+                       -->
+                        <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+                            <DataGrid HorizontalAlignment="Left" Grid.Column="2" Name="publishersAssignmentsData" IsReadOnly="True" ItemsSource="{Binding}" AutoGenerateColumns="True" Background="LightGray" RowBackground="LightYellow" AlternatingRowBackground="LightBlue" Grid.ColumnSpan="2" LoadingRow="Datagrid_LoadingRow" />
+                        </Grid>
+                    </DockPanel>
+                </TabItem>
+                <TabItem Header="Territoires">
+                    <Grid Background="#FFE5E5E5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="450" />
+                            <ColumnDefinition Width="5" />
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <!--<DataGrid Name="territoriesData"  IsReadOnly="True" ItemsSource="{Binding}" SelectionMode="Single" AutoGenerateColumns="False" Background="LightGray" RowBackground="LightYellow" AlternatingRowBackground="Beige" Grid.ColumnSpan="2" LoadingRow="Datagrid_LoadingRow" >-->
+                        <jibcontrols:JibGrid Name="territoriesData" IsReadOnly="True"  HorizontalAlignment="Left" AutoGenerateColumns="False" SelectionMode="Single" SelectionChanged="TerritoriesData_SelectedCellsChanged" CanUserFreeze="True" CanUserSelectDistinct="True" CanUserGroup="False" CanUserFilter="True" Background="LightGray" RowBackground="LightYellow" AlternatingRowBackground="Wheat" Grid.ColumnSpan="2" LoadingRow="Datagrid_LoadingRow"  Margin="0,0,0,0" >
+                            <DataGrid.Columns>
+                                <DataGridTextColumn  Binding="{Binding type}" Header="Type"/>
+                                <DataGridTextColumn  Binding="{Binding number}" Header="Numéro"/>
+                                <DataGridTextColumn  Binding="{Binding description}" Header="Description"/>
+                            </DataGrid.Columns>
+                        <!--</DataGrid>-->
+                        </jibcontrols:JibGrid>
+                        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
+                        <jibcontrols:JibGrid Name="territoryAddressesData" Grid.Column="2"  IsReadOnly="True"  HorizontalAlignment="Left" AutoGenerateColumns="False" CanUserFreeze="True" CanUserSelectDistinct="True" CanUserGroup="False" CanUserFilter="True" Background="LightGray" RowBackground="LightYellow" AlternatingRowBackground="LightBlue" Grid.ColumnSpan="2" LoadingRow="Datagrid_LoadingRow"  Margin="0,0,0,0" >
+                            <DataGrid.Columns>
+                                <DataGridTextColumn  Binding="{Binding TerritoryNumber}" Header="Numéro"/>
+                                <DataGridTextColumn  Binding="{Binding Address}" Header="Adresse"/>
+                                <DataGridTextColumn  Binding="{Binding Language}" Header="Langue"/>
+                                <DataGridTextColumn  Binding="{Binding Details}" Header="Infos"/>
+                               <!--<DataGridTextColumn  Binding="{Binding Remark}" Header="Notes"/>-->
+                            </DataGrid.Columns>
+                            <!--</DataGrid>-->
+                        </jibcontrols:JibGrid>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Attributions de territoires">
+                    <Grid Background="#FFE5E5E5">
+                        <jibcontrols:JibGrid HorizontalAlignment="Left" Name="assignmentsData" IsReadOnly="True" SelectionMode="Single" AutoGenerateColumns="False" Background="LightGray" RowBackground="LightYellow" AlternatingRowBackground="LightGreen" Grid.ColumnSpan="2" LoadingRow="Datagrid_LoadingRow" CanUserFreeze="True" CanUserSelectDistinct="True" CanUserGroup="True" CanUserFilter="True"  >
+                            <DataGrid.Columns>
+                                <DataGridTextColumn  Binding="{Binding TerritoryNumber}" Header="Numéro"/>
+                                <DataGridTextColumn  Binding="{Binding TerritoryType}" Header="Type"/>
+                                <DataGridTextColumn  Binding="{Binding TerritoryDescription}" Header="Description"/>
+                                <DataGridTextColumn  Binding="{Binding PublisherName}" Header="Proclamateur"/>
+                                <DataGridTextColumn  Binding="{Binding Email}" Header="Email"/>
+                                <DataGridTextColumn  Binding="{Binding PhoneNumber}" Header="Téléphone"/>
+                                <DataGridTextColumn  Binding="{Binding AssignDate}" Header="Date d'attribution"/>
+                                <DataGridTextColumn  Binding="{Binding ReturnDate}" Header="Date de restitution"/>
+                            </DataGrid.Columns>
+                        </jibcontrols:JibGrid>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Gestion">
+                    <StackPanel Background="#FFE5E5E5">
+                    <Grid Background="#FFE5E5E5">
+                            <Button Name="mailWork"  Margin="0 100 0 0"  Width="300" Content="Mail Travail" Click="MailWork_Click" />
+                    </Grid>
+                    </StackPanel>
+                </TabItem>
+                <TabItem Header="Règlages">
+                    <WrapPanel Background="#FFE5E5E5">
+                        <Label>Format des territoires exportés:</Label>
+                        <ComboBox Name="TerritoriesFormat" Background="White" Margin="20 0 0 0" Width="100">
+                            <ComboBoxItem IsSelected="True" >GeoJson</ComboBoxItem>
+                            <ComboBoxItem>KML</ComboBoxItem>
+                        </ComboBox>
+                    </WrapPanel>
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </Grid>
+</Window>
