@@ -12,6 +12,7 @@ namespace TerritoryHelperWPFApp
         public string Address { get; set; }
         public string Details { get; set; }
         public string Language { get; set; }
+        public string Status { get; set; }
         public string Remark { get; set; }
     }
 }

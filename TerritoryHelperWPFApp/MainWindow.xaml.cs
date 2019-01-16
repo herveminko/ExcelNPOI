@@ -19,6 +19,8 @@ using TerritoryHelperWinClient;
 using Newtonsoft.Json.Linq;
 using InterestedExcelParser;
 using System.IO;
+using System.Net.Http;
+using System.Threading;
 
 namespace TerritoryHelperWPFApp
 {
@@ -36,9 +38,12 @@ namespace TerritoryHelperWPFApp
         {
             InitializeComponent();
             loadAssignmentsFromDisk();
-            loadPublishersFromDisk();
             loadTerritoriesFromDisk();
+            loadPublishersFromDisk();
+
             loadAllAddressesFromDisk();
+            //Thread childThread = new Thread(loadAllAddressesFromDisk);
+            //childThread.Start();
         }
 
         private string GetTerritoryHelperServerUrl()
@@ -52,12 +57,22 @@ namespace TerritoryHelperWPFApp
             string servicePath = System.Configuration.ConfigurationSettings.AppSettings["service-path-publishers"];
 
             TerritoryHelperWebSkeleton helper = new TerritoryHelperWebSkeleton();
-            await helper.GetTerritoryHelperPublishersAsync(GetTerritoryHelperServerUrl(), servicePath);
-            loadPublishersFromDisk();
+            try
+            {
+                await helper.GetTerritoryHelperPublishersAsync(GetTerritoryHelperServerUrl(), servicePath);
+                string message = "La liste des proclamateurs a bien été téléchargée du serveur web. ";
+                MessageBoxResult result = await Task.Run(() => MessageBox.Show(message, "INFO", MessageBoxButton.OK, MessageBoxImage.Information));
+                loadPublishersFromDisk();
+            }
+            catch (HttpRequestException ex)
+            {
+                string message = "Echec du téléchargement de la liste des proclamateurs. Verifiez votre connection internet ou l'accessibilité du serveur: " + GetTerritoryHelperServerUrl();
+                MessageBoxResult result = await Task.Run(() => MessageBox.Show(message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error));
+            }
 
-            string message = "La liste des proclamateurs a bien été téléchargée du serveur web. ";
-            MessageBoxResult result = await Task.Run(() => MessageBox.Show(message, "INFO", MessageBoxButton.OK, MessageBoxImage.Information));
-            //switch (result)
+            
+
+               //switch (result)
             //{
             //    case MessageBoxResult.None:
             //        break;
@@ -117,14 +132,20 @@ namespace TerritoryHelperWPFApp
                 servicePath = servicePath.Replace("Export", "ExportAsync");
                 exportFormat = "json";
             }
-            
-            await helper.GetTerritoryHelperTerritoriesCardsAsync(GetTerritoryHelperServerUrl(), servicePath, exportFormat);
+            try {
+                await helper.GetTerritoryHelperTerritoriesCardsAsync(GetTerritoryHelperServerUrl(), servicePath, exportFormat);
+                string message = "Les limites géographiques des territoires de l'assemblée ont été téléchargées du serveur web (Format = " + exportFormat + ")";
+                MessageBoxResult result = await Task.Run(() => MessageBox.Show(message, "INFO", MessageBoxButton.OK, MessageBoxImage.Information));
 
-            loadTerritoriesFromDisk();
+                loadTerritoriesFromDisk();
+            }
+            catch (HttpRequestException ex)
+            {
+                string message = "Echec du téléchargement de la liste des territoires. Verifiez votre connection internet ou l'accessibilité du serveur: " + GetTerritoryHelperServerUrl();
+                MessageBoxResult result = await Task.Run(() => MessageBox.Show(message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error));
+            }
 
-            string message = "Les limites géographiques des territoires de l'assemblée ont été téléchargées du serveur web (Format = " + exportFormat + ")";
-            MessageBoxResult result = await Task.Run(() => MessageBox.Show(message, "INFO", MessageBoxButton.OK, MessageBoxImage.Information));
-        }
+         }
 
 
 
@@ -133,14 +154,23 @@ namespace TerritoryHelperWPFApp
             string servicePath = System.Configuration.ConfigurationSettings.AppSettings["service-path-addresses"];
 
             TerritoryHelperWebSkeleton helper = new TerritoryHelperWebSkeleton();
-            await helper.GetTerritoryHelperAddressesAsync(GetTerritoryHelperServerUrl(), servicePath);
-            string message = "Les adresses des territoires ont bien été téléchargées du serveur web. ";
-            MessageBoxResult result = await Task.Run(() => MessageBox.Show(message, "INFO", MessageBoxButton.OK, MessageBoxImage.Information));
-            allAddresses = NPOIExcelUtilities.ExcelSheetToDataTable("all-addresses.xlsx", 0);
-            ParseAddressFile();
+            try
+            {
+                await helper.GetTerritoryHelperAddressesAsync(GetTerritoryHelperServerUrl(), servicePath);
+                string message = "Les adresses des territoires ont bien été téléchargées du serveur web. ";
+                MessageBoxResult result = await Task.Run(() => MessageBox.Show(message, "INFO", MessageBoxButton.OK, MessageBoxImage.Information));
+                //CreateTerritoriesAddressFiles();
+            }
+            catch (HttpRequestException ex)
+            {
+                string message = "Echec du téléchargement des addresses des territoires. Verifiez votre connection internet ou l'accessibilité du serveur: " + GetTerritoryHelperServerUrl();
+                MessageBoxResult result = await Task.Run(() => MessageBox.Show(message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error));
+            }
+
+            loadAllAddressesFromDisk();
         }
 
-        private void ParseAddressFile()
+        private void CreateTerritoriesAddressFiles()
         {
             TerritoryHelperFileParser parser = new TerritoryHelperFileParser();
             parser.ParseTerritoryHelperInterestedFile(null);
@@ -157,13 +187,20 @@ namespace TerritoryHelperWPFApp
             string servicePath = System.Configuration.ConfigurationSettings.AppSettings["service-path-assignments"];
 
             TerritoryHelperWebSkeleton helper = new TerritoryHelperWebSkeleton();
-            await helper.GetTerritoryHelperTerritoriesAssignmentsAsync(GetTerritoryHelperServerUrl(), servicePath);
+            try {
+                await helper.GetTerritoryHelperTerritoriesAssignmentsAsync(GetTerritoryHelperServerUrl(), servicePath);
+                string message = "Les attributions de territoires ont bien été téléchargées du serveur web. ";
+                MessageBoxResult result = await Task.Run(() => MessageBox.Show(message, "INFO", MessageBoxButton.OK, MessageBoxImage.Information));
+                loadAssignmentsFromDisk();
+            }
+            catch (HttpRequestException ex)
+            {
+                string message = "Echec du téléchargement des attributions de territoires. Verifiez votre connection internet ou l'accessibilité du serveur: " + GetTerritoryHelperServerUrl();
+                MessageBoxResult result = await Task.Run(() => MessageBox.Show(message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error));
+            }
+            
 
-            loadAssignmentsFromDisk();
-
-            string message = "Les attributions de territoires ont bien été téléchargées du serveur web. ";
-            MessageBoxResult result = await Task.Run(() => MessageBox.Show(message, "INFO", MessageBoxButton.OK, MessageBoxImage.Information));
-
+         
         }
 
         private void TerritoriesData_SelectedCellsChanged(object sender, SelectionChangedEventArgs e)
@@ -182,22 +219,24 @@ namespace TerritoryHelperWPFApp
                     // Trying to get the mail (third column)
                     string territoryNumber = ((TextBlock)cellTerritoryNumber.Content).Text;
                     List<TerritoryAddress> addresses = new List<TerritoryAddress>();
-
-                    foreach (DataRow row2 in allAddresses.Rows)
+                    if (allAddresses != null)
                     {
-                        string currentRowTerritoryNumber = row2["Numéro de territoire"].ToString();
-                        string logement = row2["Logement"].ToString();
-                        if (currentRowTerritoryNumber == territoryNumber && logement != null && logement.Length > 0) { 
-                            TerritoryAddress add = new TerritoryAddress();
-                            add.TerritoryNumber = territoryNumber;
-                            add.Address = row2["Adresse"].ToString();
-                            add.Details = row2["Logement"].ToString();
-                            add.Language = row2["Langue"].ToString();
-                            add.Remark = row2["Notes"].ToString();
+                        foreach (DataRow row2 in allAddresses.Rows)
+                        {
+                            string currentRowTerritoryNumber = row2["Numéro de territoire"].ToString();
+                            string logement = row2["Logement"].ToString();
+                            if (currentRowTerritoryNumber == territoryNumber && logement != null && logement.Length > 0) {
+                                TerritoryAddress add = new TerritoryAddress();
+                                add.TerritoryNumber = territoryNumber;
+                                add.Address = row2["Adresse"].ToString();
+                                add.Details = row2["Logement"].ToString();
+                                add.Status = row2["Statut"].ToString();
+                                add.Language = row2["Langue"].ToString();
+                                add.Remark = row2["Notes"].ToString();
 
-                            addresses.Add(add);
+                                addresses.Add(add);
+                            }
                         }
-
                     }
                    
                     territoryAddressesData.FilteredItemsSource = addresses;
@@ -303,7 +342,7 @@ namespace TerritoryHelperWPFApp
             if (publishers != null)
             {
                 //publishersData.DataContext = publishers.DefaultView;
-                publishersData.ItemsSource = publishers.DefaultView;
+                // publishersData.ItemsSource = publishers.DefaultView;
 
                 List<Publisher> publishersList = new List<Publisher>();
                 foreach (DataRow row in publishers.Rows)
@@ -323,7 +362,6 @@ namespace TerritoryHelperWPFApp
                     }
                     publishersList.Add(pub);
                 }
-
                publishersData.FilteredItemsSource = publishersList;
             }
         }
@@ -336,7 +374,40 @@ namespace TerritoryHelperWPFApp
 
         public void loadAllAddressesFromDisk()
         {
-                allAddresses = NPOIExcelUtilities.ExcelSheetToDataTable("all-addresses.xlsx", 0);
+            allAddresses = UiHelper.loadAllAddressesFromDisk();
+            UpdateAddressesData();
+        }
+
+        public void UpdateAddressesData()
+        {
+            List<TerritoryAddress> addresses = new List<TerritoryAddress>();
+            if (allAddresses != null)
+            {
+                foreach (DataRow row in allAddresses.Rows)
+                {
+                    string logement = row["Logement"].ToString();
+
+                    string type = row["Type de territoire"].ToString();
+                    if (logement != null && logement.Length > 0 && !type.Equals("P") && !type.Equals("C"))
+                    //if (logement != null && logement.Length > 0)
+                    {
+                        TerritoryAddress add = new TerritoryAddress();
+                        add.TerritoryNumber = row["Numéro de territoire"].ToString();
+                        add.Address = row["Adresse"].ToString();
+                        add.Details = row["Logement"].ToString();
+
+                        string status = row["Statut"].ToString();
+                        add.Language = row["Langue"].ToString();
+                        add.Remark = row["Notes"].ToString();
+                        add.Status = status; // "Ne voulant Plus être Visité"
+
+                        addresses.Add(add);
+                    }
+
+                }
+            }
+
+            allAddressesData.FilteredItemsSource = addresses;
         }
 
     }

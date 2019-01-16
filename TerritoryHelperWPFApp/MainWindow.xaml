@@ -6,7 +6,9 @@
         xmlns:jibcontrols="clr-namespace:Jib.WPF.Controls.DataGrid;assembly=Jib.WPF.Controls"
         xmlns:local="clr-namespace:TerritoryHelperWPFApp"
         mc:Ignorable="d"
-        Title="Abigader Territory Helper Client - 1.0" Height="800" Width="900"
+        Title="Abigader Territory Helper Client - 1.0" 
+        Height="800" 
+        Width="900"
         AllowsTransparency="False"
         FontStyle="Italic"
         FontSize="14"
@@ -31,7 +33,7 @@
                             <DockPanel>
                                 <ToolBar DockPanel.Dock="Top" HorizontalAlignment="Center">Liste des proclamateurs de l'assemblée</ToolBar>
                                 <Grid>
-                                    <jibcontrols:JibGrid HorizontalAlignment="Left" Name="publishersData" IsReadOnly="True" SelectionMode="Single" AutoGenerateColumns="False" Background="LightGray" RowBackground="White" AlternatingRowBackground="LightBlue" Grid.ColumnSpan="2" SelectionChanged="PublishersData_SelectedCellsChanged" LoadingRow="Datagrid_LoadingRow" CanUserFreeze="True" CanUserSelectDistinct="True" CanUserGroup="False" CanUserFilter="True"  >
+                                    <jibcontrols:JibGrid HorizontalAlignment="Left" Name="publishersData" IsReadOnly="True" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False" Background="LightGray" RowBackground="White" AlternatingRowBackground="LightBlue" Grid.ColumnSpan="2" SelectionChanged="PublishersData_SelectedCellsChanged" LoadingRow="Datagrid_LoadingRow" CanUserFreeze="True" CanUserSelectDistinct="True" CanUserGroup="False" CanUserFilter="True"  >
                                     <DataGrid.Columns>
                                         <DataGridTextColumn  Binding="{Binding FirstName}" Header="Prénom"/>
                                         <DataGridTextColumn  Binding="{Binding LastName}" Header="Nom"/>
@@ -63,7 +65,7 @@
                         <DockPanel Grid.ColumnSpan="2" >
                             <ToolBar DockPanel.Dock="Top" HorizontalAlignment="Center">Liste des territoires de l'assemblée</ToolBar>
                             <!--<DataGrid Name="territoriesData"  IsReadOnly="True" ItemsSource="{Binding}" SelectionMode="Single" AutoGenerateColumns="False" Background="LightGray" RowBackground="White" AlternatingRowBackground="Beige" Grid.ColumnSpan="2" LoadingRow="Datagrid_LoadingRow" >-->
-                            <jibcontrols:JibGrid Name="territoriesData" IsReadOnly="True"  HorizontalAlignment="Left" AutoGenerateColumns="False" SelectionMode="Single" SelectionChanged="TerritoriesData_SelectedCellsChanged" CanUserFreeze="True" CanUserSelectDistinct="True" CanUserGroup="False" CanUserFilter="True" Background="LightGray" RowBackground="White" AlternatingRowBackground="AntiqueWhite" Grid.ColumnSpan="2" LoadingRow="Datagrid_LoadingRow"  Margin="0,0,0,0" >
+                            <jibcontrols:JibGrid Name="territoriesData" IsReadOnly="True" SelectionMode="Single" SelectionUnit="FullRow" HorizontalAlignment="Left" AutoGenerateColumns="False" SelectionChanged="TerritoriesData_SelectedCellsChanged" CanUserFreeze="True" CanUserSelectDistinct="True" CanUserGroup="False" CanUserFilter="True" Background="LightGray" RowBackground="White" AlternatingRowBackground="Khaki" Grid.ColumnSpan="2" LoadingRow="Datagrid_LoadingRow"  Margin="0,0,0,0" >
                                 <DataGrid.Columns>
                                     <DataGridTextColumn  Binding="{Binding type}" Header="Type"/>
                                     <DataGridTextColumn  Binding="{Binding number}" Header="Numéro"/>
@@ -75,12 +77,13 @@
                         <GridSplitter Grid.Column="2" HorizontalAlignment="Stretch" />
                         <DockPanel  Grid.Column="3" >
                             <ToolBar DockPanel.Dock="Top" HorizontalAlignment="Center">Liste d'adresses du territoire</ToolBar>
-                            <jibcontrols:JibGrid Name="territoryAddressesData"  IsReadOnly="True"  HorizontalAlignment="Left" AutoGenerateColumns="False" CanUserFreeze="True" CanUserSelectDistinct="True" CanUserGroup="False" CanUserFilter="True" Background="LightGray" RowBackground="White" AlternatingRowBackground="AntiqueWhite" Grid.ColumnSpan="2" LoadingRow="Datagrid_LoadingRow"  Margin="0,0,0,0" >
+                            <jibcontrols:JibGrid Name="territoryAddressesData"  IsReadOnly="True" SelectionMode="Single" SelectionUnit="FullRow" HorizontalAlignment="Left" AutoGenerateColumns="False" CanUserFreeze="True" CanUserSelectDistinct="True" CanUserGroup="False" CanUserFilter="True" Background="LightGray" RowBackground="White" Grid.ColumnSpan="2" LoadingRow="Datagrid_LoadingRow"  Margin="0,0,0,0" >
                                 <DataGrid.Columns>
                                     <!--<DataGridTextColumn  Binding="{Binding TerritoryNumber}" Header="Numéro"/>-->
                                     <DataGridTextColumn  Binding="{Binding Address}" Header="Adresse"/>
                                     <DataGridTextColumn  Binding="{Binding Language}" Header="Langue"/>
                                     <DataGridTextColumn  Binding="{Binding Details}" Header="Infos"/>
+                                    <DataGridTextColumn  Binding="{Binding Status}" Header="Statut"/>
                                     <DataGridTextColumn  Binding="{Binding Remark}" Header="Notes"/>
                                 </DataGrid.Columns>
                                 <!--</DataGrid>-->
@@ -88,10 +91,10 @@
                         </DockPanel>
                     </Grid>
                 </TabItem>
-                <TabItem Header="Attributions de territoires" FontWeight="Bold">
+                <TabItem Header="Attributions" FontWeight="Bold">
                     <DockPanel Background="#FFE5E5E5">
                         <ToolBar DockPanel.Dock="Top" HorizontalAlignment="Center">Attributions des territoires de l'assemblée</ToolBar>
-                        <jibcontrols:JibGrid HorizontalAlignment="Left" Name="assignmentsData" IsReadOnly="True" SelectionMode="Single" AutoGenerateColumns="False"  Background="LightGray" RowBackground="White" AlternatingRowBackground="LightGreen" Grid.ColumnSpan="2" LoadingRow="Datagrid_LoadingRow" CanUserFreeze="True" CanUserSelectDistinct="True" CanUserGroup="True" CanUserFilter="True"  >
+                        <jibcontrols:JibGrid HorizontalAlignment="Left" Name="assignmentsData" IsReadOnly="True" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False"  Background="LightGray" RowBackground="White" AlternatingRowBackground="LightGreen" Grid.ColumnSpan="2" LoadingRow="Datagrid_LoadingRow" CanUserFreeze="True" CanUserSelectDistinct="True" CanUserGroup="True" CanUserFilter="True"  >
                             <DataGrid.Columns>
                                 <DataGridTextColumn  Binding="{Binding TerritoryNumber}" Header="Numéro"/>
                                 <DataGridTextColumn  Binding="{Binding TerritoryType}" Header="Type"/>
@@ -101,6 +104,21 @@
                                 <DataGridTextColumn  Binding="{Binding PhoneNumber}" Header="Téléphone"/>
                                 <DataGridTextColumn  Binding="{Binding AssignDate}" Header="Date d'attribution"/>
                                 <DataGridTextColumn  Binding="{Binding ReturnDate}" Header="Date de restitution"/>
+                            </DataGrid.Columns>
+                        </jibcontrols:JibGrid>
+                    </DockPanel>
+                </TabItem>
+                <TabItem Header="Adresses" FontWeight="Bold">
+                    <DockPanel Background="#FFE5E5E5">
+                        <ToolBar DockPanel.Dock="Top" HorizontalAlignment="Center">Liste complète d'adresses des territoires de l'assemblée</ToolBar>
+                        <jibcontrols:JibGrid HorizontalAlignment="Left" Name="allAddressesData" IsReadOnly="True" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False"  Background="LightGray" RowBackground="White" AlternatingRowBackground="PaleGoldenrod" Grid.ColumnSpan="2" LoadingRow="Datagrid_LoadingRow" CanUserFreeze="True" CanUserSelectDistinct="True" CanUserGroup="True" CanUserFilter="True"  >
+                            <DataGrid.Columns>
+                                <DataGridTextColumn  Binding="{Binding TerritoryNumber}" Header="Numéro Territoire"/>
+                                <DataGridTextColumn  Binding="{Binding Address}" Header="Adresse"/>
+                                <DataGridTextColumn  Binding="{Binding Language}" Header="Langue"/>
+                                <DataGridTextColumn  Binding="{Binding Status}" Header="Statut"/>
+                                <DataGridTextColumn  Binding="{Binding Details}" Header="Infos"/>
+                                <DataGridTextColumn  Binding="{Binding Remark}" Header="Notes"/>
                             </DataGrid.Columns>
                         </jibcontrols:JibGrid>
                     </DockPanel>

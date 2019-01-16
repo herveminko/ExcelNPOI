@@ -43,7 +43,7 @@ namespace TerritoryHelperWPFApp
                     {
                         var props = item.properties;
                         string type = props.TerritoryType;
-                        if (!type.Equals("P"))
+                        if (!type.Equals("P") && !type.Equals("C"))
                         {
                             Territory territory = new Territory();
                             string number = props.TerritoryNumber;
@@ -68,7 +68,15 @@ namespace TerritoryHelperWPFApp
 
         public static DataTable loadPublishersFromDisk()
         {
-            publishers = NPOIExcelUtilities.ExcelSheetToDataTable("all-publishers.xlsx", 0);            
+            try
+            {
+                publishers = NPOIExcelUtilities.ExcelSheetToDataTable("all-publishers.xlsx", 0);
+            }
+            catch (Exception ex)
+            {
+                // throw ex; 
+                publishers = new DataTable();
+            }
             return publishers;
         }
 
@@ -81,6 +89,7 @@ namespace TerritoryHelperWPFApp
             catch (Exception ex)
             {
                 // throw ex; 
+                assignments = new DataTable();
             }
             return assignments;
         }
@@ -145,6 +154,9 @@ namespace TerritoryHelperWPFApp
             if (File.Exists("all-addresses.xlsx"))
             {
                 result =  NPOIExcelUtilities.ExcelSheetToDataTable("all-addresses.xlsx", 0);
+            } else
+            {
+                result = new DataTable();
             }
             return result;
         }
