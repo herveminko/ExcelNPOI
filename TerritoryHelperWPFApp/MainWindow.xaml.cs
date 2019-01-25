@@ -410,5 +410,28 @@ namespace TerritoryHelperWPFApp
             allAddressesData.FilteredItemsSource = addresses;
         }
 
+        private void CreateTerritoriesFiles_Click(object sender, RoutedEventArgs e)
+        {
+            Action onCompleted = () =>
+            {
+                //On complete action
+                string message = "Creation des fichiers d'adresses des territoires terminée dans ";
+                MessageBox.Show(message, "INFO", MessageBoxButton.OK, MessageBoxImage.Information);
+            };
+
+            var thread = new Thread(
+              () =>
+              {
+                  try
+                  {
+                      CreateTerritoriesAddressFiles();
+                  }
+                  finally
+                  {
+                      onCompleted();
+                  }
+              });
+            thread.Start();
+        }
     }
 }

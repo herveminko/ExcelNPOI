@@ -135,6 +135,7 @@
                                     <Button Name="assignmentsDownload" Margin="0 20 0 0" Background="#FF7F90FC" Height="50" Width="300" Style="{DynamicResource RoundedButton}" Content="Téléchargement Attributions de territoires" Click="AssignmentsDownload_Click" />
                                     <Button Name="territoriesCardsDownload" Margin="0 20 0 0" Background="#FF7F90FC" Height="50" Width="300" Style="{DynamicResource RoundedButton}" Content="Téléchargement cartes de territoires" Click="TerritoriesCardsDownload_Click"/>
                                     <Button Name="addressesDownload" Margin="0 20 0 0" Background="#FF7F90FC" Height="50" Width="300" Style="{DynamicResource RoundedButton}" Content="Téléchargement adresses de territoires" Click="AddressesDownload_Click" />
+                                    <Button Name="createTerritoriesFiles" Margin="0 20 0 0" Background="#FF7F90FC" Height="50" Width="300" Style="{DynamicResource RoundedButton}" Content="Créer les fichiers de territoires" Click="CreateTerritoriesFiles_Click" />
                                 </StackPanel>
                             </GroupBox>
                             <GroupBox Name="MailingBox" Background="#FFE5E5E5">
