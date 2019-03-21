@@ -433,5 +433,37 @@ namespace TerritoryHelperWPFApp
               });
             thread.Start();
         }
+
+        private void MenuItemExportAddresses_Click(object sender, RoutedEventArgs e)
+        {
+            //Get the clicked MenuItem
+            MenuItem menuItem = (MenuItem)sender;
+            //Get the ContextMenu to which the menuItem belongs
+            ContextMenu contextMenu = (ContextMenu)menuItem.Parent;
+
+            //Find the placementTarget
+            DataGrid dataGrid = (DataGrid)contextMenu.PlacementTarget;
+
+            dataGrid.SelectionMode = DataGridSelectionMode.Extended;
+            dataGrid.SelectAllCells();
+            dataGrid.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
+            ApplicationCommands.Copy.Execute(null, dataGrid);
+            dataGrid.UnselectAllCells();
+            dataGrid.SelectionMode = DataGridSelectionMode.Single;
+
+            string textResult = (string)System.Windows.Clipboard.GetData(System.Windows.DataFormats.Text);
+            string csvResult = (string)System.Windows.Clipboard.GetData(System.Windows.DataFormats.CommaSeparatedValue);
+
+
+            String timeStamp = DateTime.Now.ToString("yyyy-MM-dd_HHmmss");
+            string exportName = "exported_addresses";
+
+            File.AppendAllText(exportName + "_" + timeStamp + ".txt", textResult, UnicodeEncoding.UTF8);
+            File.AppendAllText(exportName + "_" + timeStamp + ".csv", csvResult, UnicodeEncoding.UTF8);
+
+            string message = "Exportation des adresses terminée";
+            MessageBox.Show(message, "INFO", MessageBoxButton.OK, MessageBoxImage.Information);
+
+        }
     }
 }

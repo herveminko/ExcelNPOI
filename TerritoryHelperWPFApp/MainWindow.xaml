@@ -33,7 +33,7 @@
                             <DockPanel>
                                 <ToolBar DockPanel.Dock="Top" HorizontalAlignment="Center">Liste des proclamateurs de l'assemblée</ToolBar>
                                 <Grid>
-                                    <jibcontrols:JibGrid HorizontalAlignment="Left" Name="publishersData" IsReadOnly="True" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False" Background="LightGray" RowBackground="White" AlternatingRowBackground="LightBlue" Grid.ColumnSpan="2" SelectionChanged="PublishersData_SelectedCellsChanged" LoadingRow="Datagrid_LoadingRow" CanUserFreeze="True" CanUserSelectDistinct="True" CanUserGroup="False" CanUserFilter="True"  >
+                                    <jibcontrols:JibGrid HorizontalAlignment="Left" Name="publishersData" IsReadOnly="True" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False" Background="LightGray" RowBackground="White" AlternatingRowBackground="LightBlue" Grid.ColumnSpan="2" SelectionChanged="PublishersData_SelectedCellsChanged" LoadingRow="Datagrid_LoadingRow" CanUserFreeze="True" CanUserSelectDistinct="True" CanUserGroup="True" CanUserFilter="True"  >
                                     <DataGrid.Columns>
                                         <DataGridTextColumn  Binding="{Binding FirstName}" Header="Prénom"/>
                                         <DataGridTextColumn  Binding="{Binding LastName}" Header="Nom"/>
@@ -94,6 +94,7 @@
                 <TabItem Header="Attributions" FontWeight="Bold">
                     <DockPanel Background="#FFE5E5E5">
                         <ToolBar DockPanel.Dock="Top" HorizontalAlignment="Center">Attributions des territoires de l'assemblée</ToolBar>
+                        <Button  />
                         <jibcontrols:JibGrid HorizontalAlignment="Left" Name="assignmentsData" IsReadOnly="True" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False"  Background="LightGray" RowBackground="White" AlternatingRowBackground="LightGreen" Grid.ColumnSpan="2" LoadingRow="Datagrid_LoadingRow" CanUserFreeze="True" CanUserSelectDistinct="True" CanUserGroup="True" CanUserFilter="True"  >
                             <DataGrid.Columns>
                                 <DataGridTextColumn  Binding="{Binding TerritoryNumber}" Header="Numéro"/>
@@ -111,7 +112,7 @@
                 <TabItem Header="Adresses" FontWeight="Bold">
                     <DockPanel Background="#FFE5E5E5">
                         <ToolBar DockPanel.Dock="Top" HorizontalAlignment="Center">Liste complète d'adresses des territoires de l'assemblée</ToolBar>
-                        <jibcontrols:JibGrid HorizontalAlignment="Left" Name="allAddressesData" IsReadOnly="True" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False"  Background="LightGray" RowBackground="White" AlternatingRowBackground="PaleGoldenrod" Grid.ColumnSpan="2" LoadingRow="Datagrid_LoadingRow" CanUserFreeze="True" CanUserSelectDistinct="True" CanUserGroup="True" CanUserFilter="True"  >
+                        <jibcontrols:JibGrid HorizontalAlignment="Left" Name="allAddressesData" IsReadOnly="True" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False"  Background="LightGray" RowBackground="White" AlternatingRowBackground="PaleGoldenrod" Grid.ColumnSpan="2" LoadingRow="Datagrid_LoadingRow" CanUserFreeze="True" CanUserSelectDistinct="True" CanUserGroup="True" CanUserFilter="True" >
                             <DataGrid.Columns>
                                 <DataGridTextColumn  Binding="{Binding TerritoryNumber}" Header="Numéro Territoire"/>
                                 <DataGridTextColumn  Binding="{Binding Address}" Header="Adresse"/>
@@ -120,6 +121,11 @@
                                 <DataGridTextColumn  Binding="{Binding Details}" Header="Infos"/>
                                 <DataGridTextColumn  Binding="{Binding Remark}" Header="Notes"/>
                             </DataGrid.Columns>
+                            <DataGrid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem  Header="Exporter" Click="MenuItemExportAddresses_Click" />
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
                         </jibcontrols:JibGrid>
                     </DockPanel>
                 </TabItem>
