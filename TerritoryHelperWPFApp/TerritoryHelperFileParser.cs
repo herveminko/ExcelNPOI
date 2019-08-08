@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,6 +14,8 @@ namespace InterestedExcelParser
 {
     class TerritoryHelperFileParser
     {
+
+        NameValueCollection appSettings = ConfigurationSettings.AppSettings;
 
         /**
          * Parse a given excel file containing interested addresses data
@@ -27,9 +31,9 @@ namespace InterestedExcelParser
 
             // Reading some configuration/initialization data...  
             Console.WriteLine("Reading some configuration/initialization data...");
-            string excelFileLocation = System.Configuration.ConfigurationSettings.AppSettings["source-file-path-addresses"];
-            string lastDataColumnsCell = System.Configuration.ConfigurationSettings.AppSettings["excel-last-data-column"];
-            string wantedColumnsListString = System.Configuration.ConfigurationSettings.AppSettings["excel-wanted-columns"];
+            string excelFileLocation = appSettings["source-file-path-addresses"];
+            string lastDataColumnsCell = appSettings["excel-last-data-column"];
+            string wantedColumnsListString = appSettings["excel-wanted-columns"];
 
 
             // If the default source file location should be overwritten...
@@ -81,7 +85,7 @@ namespace InterestedExcelParser
             sh.CreateFreezePane(0, 1);
 
 
-            string fileLocation = System.Configuration.ConfigurationSettings.AppSettings["destination-file-path-addresses"];
+            string fileLocation = appSettings["destination-file-path-addresses"];
             //string fileLocation = "C:\\Development\\c-sharp\\ExcelNPOI\\adresses-bielefeld.xlsx";
             Console.WriteLine("Writing Resulting Excel File to disk: " + fileLocation);
 
@@ -104,7 +108,7 @@ namespace InterestedExcelParser
             List<int> resultList = new List<int>();
 
             XSSFWorkbook wb = null;
-            string @excelFileLocation = System.Configuration.ConfigurationSettings.AppSettings["destination-file-path-addresses"];
+            string @excelFileLocation = appSettings["destination-file-path-addresses"];
             using (FileStream file = new FileStream(@excelFileLocation, FileMode.Open, FileAccess.Read))
             {
                 wb = new XSSFWorkbook(file);
@@ -137,7 +141,7 @@ namespace InterestedExcelParser
         public void CreateTerritoryAddressesFile(int territoryNumber)
         {
             XSSFWorkbook wb = null;
-            string @excelFileLocation = System.Configuration.ConfigurationSettings.AppSettings["destination-file-path-addresses"];
+            string @excelFileLocation = appSettings["destination-file-path-addresses"];
             using (FileStream file = new FileStream(@excelFileLocation, FileMode.Open, FileAccess.Read))
             {
                 wb = new XSSFWorkbook(file);
@@ -208,10 +212,10 @@ namespace InterestedExcelParser
         private void SetSheetSpecialConditonalFormatting(XSSFSheet sh)
         {
             int rowCount = sh.LastRowNum + 1;
-            string frechCondition = System.Configuration.ConfigurationSettings.AppSettings["condition-french"];
-            string dontVisitCondition = System.Configuration.ConfigurationSettings.AppSettings["condition-dont-visit"];
-            string conditionalRangeStartCell = System.Configuration.ConfigurationSettings.AppSettings["condition-data-range-start"];
-            string lastDataColumnsCell = System.Configuration.ConfigurationSettings.AppSettings["excel-last-data-column"];
+            string frechCondition = appSettings["condition-french"];
+            string dontVisitCondition = appSettings["condition-dont-visit"];
+            string conditionalRangeStartCell = appSettings["condition-data-range-start"];
+            string lastDataColumnsCell = appSettings["excel-last-data-column"];
 
             Console.WriteLine("Creating conditional formatting filter...");
             XSSFSheetConditionalFormatting sCF = (XSSFSheetConditionalFormatting)sh.SheetConditionalFormatting;

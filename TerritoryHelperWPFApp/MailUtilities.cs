@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Configuration;
 using System.Data;
 using System.Globalization;
 using System.IO;
@@ -12,7 +14,7 @@ namespace TerritoryHelperWinClient
 {
     class MailUtilities
     {
-
+        NameValueCollection appSettings = ConfigurationSettings.AppSettings;
 
     public bool sendTerritoryWorkRequestMail(string receiverAddress, List<string> territoriesDescription)
         {
@@ -29,19 +31,29 @@ namespace TerritoryHelperWinClient
                     territoriesString = territoriesString + desc + "\n";
                 }
 
-                mail.From = new MailAddress("hcminko@hotmail.com"); //Absender 
+            mail.From = new MailAddress(appSettings["mail-sender"]); //Absender 
             mail.To.Add(receiverAddress); //Empfänger 
-            mail.Subject = "Travail de tes territoires";
-            mail.Body = "Cher proclamateur,\nD'après notre liste tu travalles les territoires:\n\n" +
+            mail.Subject = appSettings["mail-subject-territory-work"];
+            mail.Body = "Cher proclamateur/Chère proclamatrice,\n\nD'après notre liste tu travailles les territoires:\n\n" +
                     territoriesString +
-                    "\n\nPourrais-tu nous dire s'il te plait quand tu les as travaillé complètement la dernière fois?" +
-                    "\n\nMerci d'avance pour ta coopération!!" +
+                    "\n\nPourrais-tu nous dire s'il te plait quand tu les as travaillé (COMPLÈTEMENT!!) la dernière fois?" +
+                    "\n\nMerci d'avance pour ta coopération!! Tu es prié(e) de répondre à l'une des adresses Email ci-dessous." +
                     "\n\nN.B: Par défaut, les dernières dates seront utilisées" +
-                    "\n\nTes frères" +
-                    "\nHervé Minko & Hervé Ngassop";
-            //mail.IsBodyHtml = true; //Nur wenn Body HTML Quellcode ist 
+                    "\n\n" + appSettings["signature-intro"] +
+                    "\n" + appSettings["signature"];
 
-            SmtpClient client = new SmtpClient("smtp.live.com", 25); //SMTP Server von Hotmail und Outlook. 
+                if (appSettings["mail-content-add"].Length >  0)
+                {
+                    mail.Body = mail.Body + "\n\n" + appSettings["mail-content-add"];
+                }
+                //mail.IsBodyHtml = true; //Nur wenn Body HTML Quellcode ist 
+				string SmtpPortNumberString = appSettings["mail-smtp-port"];
+                int SmtpPortNumber;
+
+                Int32.TryParse(SmtpPortNumberString, out SmtpPortNumber);
+				string SmtpHost = appSettings["mail-smtp-server"];
+
+                SmtpClient client = new SmtpClient(SmtpHost, SmtpPortNumber); //SMTP Server von Hotmail und Outlook. 
 
                 client.Credentials = new System.Net.NetworkCredential("hcminko@hotmail.com", "minkoabylor29");//Anmeldedaten für den SMTP Server 
 
@@ -54,7 +66,7 @@ namespace TerritoryHelperWinClient
             }
             catch (Exception ex)
             {
-                message = "Erreur durant l'envoi du courriel\n\n" + ex.Message;
+                message = appSettings["mail-sending-error-msg"] + ex.Message;
                 
                 boolResult = false;
             }

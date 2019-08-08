@@ -21,6 +21,8 @@ using InterestedExcelParser;
 using System.IO;
 using System.Net.Http;
 using System.Threading;
+using System.Collections.Specialized;
+using System.Configuration;
 
 namespace TerritoryHelperWPFApp
 {
@@ -33,6 +35,7 @@ namespace TerritoryHelperWPFApp
         DataTable publishers;
         DataTable assignments;
         DataTable allAddresses;
+		NameValueCollection appSettings = ConfigurationSettings.AppSettings;
 
         public MainWindow()
         {
@@ -48,13 +51,13 @@ namespace TerritoryHelperWPFApp
 
         private string GetTerritoryHelperServerUrl()
         {
-            return  System.Configuration.ConfigurationSettings.AppSettings["territory-helper-url"];
+            return  appSettings["territory-helper-url"];
         }
 
 
         private async void PublishersDownload_Click(object sender, RoutedEventArgs e)
         {
-            string servicePath = System.Configuration.ConfigurationSettings.AppSettings["service-path-publishers"];
+            string servicePath = appSettings["service-path-publishers"];
 
             TerritoryHelperWebSkeleton helper = new TerritoryHelperWebSkeleton();
             try
@@ -109,6 +112,7 @@ namespace TerritoryHelperWPFApp
                 }
                 MailUtilities mailer = new MailUtilities();
                 mailer.sendTerritoryWorkRequestMail(mail, territoriesStrings);
+
             }
 
             message = "Courriels (Travail) envoyés aux proclamateurs";
@@ -120,7 +124,7 @@ namespace TerritoryHelperWPFApp
         {
             string exportFormat = TerritoriesFormat.Text;
             TerritoryHelperWebSkeleton helper = new TerritoryHelperWebSkeleton();
-            string servicePath = System.Configuration.ConfigurationSettings.AppSettings["service-path-territories"]; 
+            string servicePath = appSettings["service-path-territories"]; 
             if (exportFormat.Contains("KML"))
             {
                 servicePath = servicePath.Replace("[FORMAT]", "GoogleEarth");
@@ -151,7 +155,7 @@ namespace TerritoryHelperWPFApp
 
         private async void AddressesDownload_Click(object sender, RoutedEventArgs e)
         {
-            string servicePath = System.Configuration.ConfigurationSettings.AppSettings["service-path-addresses"];
+            string servicePath = appSettings["service-path-addresses"];
 
             TerritoryHelperWebSkeleton helper = new TerritoryHelperWebSkeleton();
             try
@@ -184,7 +188,7 @@ namespace TerritoryHelperWPFApp
 
         private async void AssignmentsDownload_Click(object sender, RoutedEventArgs e)
         {             
-            string servicePath = System.Configuration.ConfigurationSettings.AppSettings["service-path-assignments"];
+            string servicePath = appSettings["service-path-assignments"];
 
             TerritoryHelperWebSkeleton helper = new TerritoryHelperWebSkeleton();
             try {
@@ -432,6 +436,17 @@ namespace TerritoryHelperWPFApp
                   }
               });
             thread.Start();
+
+            TerritoryHelperWebSkeleton helper = new TerritoryHelperWebSkeleton();
+            // https://territoryhelper.com/fr/Pdf/BeginExportTerritoryAsync/
+            //string servicePath = "/Pdf/BeginExportTerritoryAsync/";
+
+            //await helper.GetTerritoryHelperPublishersAsync(GetTerritoryHelperServerUrl(), servicePath);
+            //string message = "FIches de territoires créées!!! ";
+            //MessageBoxResult result = await Task.Run(() => MessageBox.Show(message, "INFO", MessageBoxButton.OK, MessageBoxImage.Information));
+
+            //printContext:
+            // {"TerritoryId":1988067,"CampaignId":0,"TimeZoneOffset":-120,"PageFormat":"A4","PageOrientation":"Landscape","FontSize":"Large","MarginHorizontal":12,"MarginVertical":12,"ShowMap":true,"Longitude":8.774659037590029,"Latitude":51.705893740049945,"ZoomLevel":18,"FineZoomLevel":100,"MapTheme":"OPENSTREETMAP","TerritoryColor":"4A86E8","ShowName":false,"ShowLocationMarkers":true,"ShowLocationMarkerLabels":true,"ShowCurrentLocation":false,"InversePolygon":true,"ShowCompass":false,"MapHeight":674.296875,"MapWidth":1031.796875,"ShowLocations":true,"ShowLocationUnits":true,"LocationPageBreak":true,"Columns":1,"ShowDoNotCalls":false,"ShowCompactLocations":false,"ShowLocationSequence":false,"FilterMapLocations":true,"ShowTypeColumn":false,"ShowStatusColumn":false,"ShowLanguageColumn":true,"ShowVisitColumn":false,"ShowLastVisitedColumn":false,"ShowDateColumn":false,"ShowNotesColumn":false,"ShowNumberColumn":true,"ShowFullAddressColumn":true,"ShowPostCodeColumn":false,"ShowCityColumn":false,"ShowCoordinatesColumn":false,"ShowFloorColumn":false,"SelectedLanguageIds":[10142,0,10141],"SelectedStatusIds":[4,2,15,18,0],"ShowAssignmentInfo":false,"ShowDueDate":false,"ShowQrCode":false,"showNotes":true,"ShowComments":false,"ShowImage":true,"ShowTags":true,"ShowLabel":false,"Comments":""}
         }
 
         private void MenuItemExportAddresses_Click(object sender, RoutedEventArgs e)

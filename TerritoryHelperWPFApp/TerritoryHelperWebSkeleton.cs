@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -10,10 +12,10 @@ namespace TerritoryHelperWinClient
 {
     class TerritoryHelperWebSkeleton
     {
-
+        NameValueCollection appSettings = ConfigurationSettings.AppSettings;
         /**
-      * Get the territory helper addresses data from the web and store the Excel file to the default location if possible.
-      */
+         * Get the territory helper addresses data from the web and store the Excel file to the default location if possible.
+         */
         public async Task GetTerritoryHelperAddressesAsync(string serverLoginUrl, string servicePath)
         {
             Console.WriteLine("Try to get latest addresses data from territory helper website...");
@@ -64,7 +66,7 @@ namespace TerritoryHelperWinClient
 
                 var values = new Dictionary<string, string>
                     {
-                       { "Email", "hcminko@hotmail.com" },
+                       { "Email", appSettings["territory-helper-user"] },
                        { "Password", "moneboulou" },
                        { "PersistLogin", "false" },
                        { "RedirectUrl",  addServicePath}
