@@ -1,0 +1,97 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+//rootProject.libsDirName = 'libs\..\..\target'
+
+////libsDirName = '../target'
+
+////mainClassName = 'com.mettenmeier.gsrest.entrypoint.MettenmeierGeoserverApiClient'
+
+repositories {
+   mavenCentral()
+   maven {
+      url "http://repo.mycompany.com/maven2"
+   }
+}
+
+dependencies {
+   compile group: 'org.hibernate', name: 'hibernate-core', version: '3.6.7.Final'
+   testCompile group: 'junit', name: 'junit', version: '4.8.1'
+}
+
+/*
+println("libsDir = " + project.libsDir.toString())
+println("distsDir = " + project.distsDir.toString())
+*/
+
+
+
+task hello {
+   doLast {
+      println 'Hervé Minko first gradle build'
+   }
+}
+
+
+task count (dependsOn: 'hello')  {
+	doLast {
+		4.times { 
+		print "$it " 
+		}
+	}
+}
+
+
+task upper (dependsOn: 'count') {
+	doLast {
+		String expString = 'TUTORIALS point'
+		println "Original: " + expString
+		println "Upper case: " + expString.toUpperCase()
+    }
+}
+
+task groovyJDK {
+	doLast {
+	   String myName = "Marc";
+	   myName.each() { 
+		  println "${it}" 
+	   };
+    }
+}
+groovyJDK.dependsOn upper
+
+task copy(type: Copy) {
+   description 'Copies the resource directory to the target directory.'
+   from 'src/main/resources'
+   into 'target'
+   include('**/*.txt', '**/*.xml', '**/*.properties', '**/*.zip', '**/*.shp',)
+   println("description applied")
+}
+
+task eclipse {
+   println 'Hello Eclipse'
+}
+
+// #1st approach - closure returning true, if the task should be executed, false if not.
+/*
+eclipse.onlyIf {
+   project.hasProperty('usingEclipse')
+}
+*/
+
+// #2nd approach - alternatively throw an StopExecutionException() like this
+eclipse.doFirst {
+   if(!usingEclipse) {
+      throw new StopExecutionException()
+   }
+}
+
+
+
+//task copyAll(type: Copy) {
+//   description 'Copies the resource directory to the target directory.'
+//   from '\\yass\Projekte\sw_product_development\UEW\releases\sub_products\mgc_map_information\3.0\3.0.9.0\mgc-config\default\mgc-client\config\apps'
+//   into 'target\apps'
+//   include('**/*.txt', '**/*.xml', '**/*.properties', '**/*.zip', '**/*.shp',)
+//   println("description applied")
+//}

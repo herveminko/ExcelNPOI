@@ -1,0 +1,29 @@
+﻿task hello {
+     group 'vogella'
+     description 'The hello task greets Gradle by saying "Hello Gradle"'
+
+     doFirst {
+        println 'Hello Gradle'
+     }
+     doLast {
+        println 'Bye bye Gradle'
+     }
+}
+
+task copyFile(type: Copy) {
+   description 'Copies the resource directory to the target directory.'
+   from 'C:/Development/c-sharp/ExcelNPOI/TerritoryHelperWPFApp/bin/Debug/'
+   into 'C:/Development/c-sharp/ExcelNPOI/TerritoryHelperWPFApp/bin/Debug2/'
+   include('**/*.txt', '**/*.xml', '**/*.properties')
+   println("description applied")
+}
+
+
+
+task myZip(type: Zip) {
+   from 'C:/Development/c-sharp/ExcelNPOI/TerritoryHelperWPFApp/bin/Debug/'
+   include '*'
+   include '*/*' //to include contents of a folder present inside Reports directory
+   archiveName 'TerriToryHelperClient.zip'
+   destinationDir(file('C:/Development/c-sharp/ExcelNPOI/TerritoryHelperWPFApp/bin/Debug/'))
+}
