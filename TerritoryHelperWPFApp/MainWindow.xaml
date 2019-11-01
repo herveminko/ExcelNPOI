@@ -149,7 +149,8 @@
                                     <Label Foreground="Blue">Mailing</Label>
                                 </GroupBox.Header>
                                 <StackPanel>
-                                    <Button Name="mailWork"  Margin="0 20 0 0" Background="#FF7F90FC" Height="50" Width="300" Style="{DynamicResource RoundedButton}" Content="Mail Travail" Click="MailWork_Click" />
+                                    <Button Name="mailWork"  Margin="0 20 0 0" Background="#FF7F90FC" Height="50" Width="300" Style="{DynamicResource RoundedButton}" Content="Mail Travail Territoires" Click="MailWork_Click" />
+                                    <Button Name="mailReturn"  Margin="0 20 0 0" Background="#FF7F90FC" Height="50" Width="300" Style="{DynamicResource RoundedButton}" Content="Mail Retour Territoires" Click="MailReturn_Click" />
                                 </StackPanel>
                             </GroupBox>
                         </DockPanel>

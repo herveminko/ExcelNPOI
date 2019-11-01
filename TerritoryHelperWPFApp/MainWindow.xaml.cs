@@ -120,6 +120,32 @@ namespace TerritoryHelperWPFApp
 
         }
 
+        private async void MailReturn_Click(object sender, RoutedEventArgs e)
+        {
+            string message;
+            bool success;
+
+
+            foreach (string mail in publishersAssignments.Keys)
+            {
+                DataTable territorries = (DataTable)publishersAssignments[mail];
+                List<string> territoriesStrings = new List<string>();
+                foreach (DataRow row in territorries.Rows)
+                {
+                    territoriesStrings.Add(row[0].ToString());
+                }
+                MailUtilities mailer = new MailUtilities();
+                success = mailer.sendReturnAllTerritoriesMail(mail, territoriesStrings);
+
+            }
+
+            message = "Courriels (Retour) envoyés aux proclamateurs";
+            MessageBoxResult result = await Task.Run(() => MessageBox.Show(message, "INFO", MessageBoxButton.OK, MessageBoxImage.Information));
+
+        }
+
+        
+
         private async void TerritoriesCardsDownload_Click(object sender, RoutedEventArgs e)
         {
             string exportFormat = TerritoriesFormat.Text;

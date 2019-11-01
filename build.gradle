@@ -26,7 +26,7 @@ println("distsDir = " + project.distsDir.toString())
 
 
 
-task hello {
+task buildPackage {
      group 'vogella'
      description 'The hello task greets Gradle by saying "Hello Gradle"'
 
@@ -37,6 +37,7 @@ task hello {
         println 'Bye bye Gradle'
      }
 }
+buildPackage.dependsOn zipFiles
 
 task copyFiles(type: Copy) {
    description 'Copies the resource directory to the target directory.'
@@ -49,6 +50,7 @@ task copyFiles(type: Copy) {
 
 
 
+
 task zipFiles(type: Zip) {
    from 'C:/Development/c-sharp/ExcelNPOI/TerritoryHelperWPFApp/bin/Release/'
    include '*'
@@ -57,3 +59,4 @@ task zipFiles(type: Zip) {
    archiveName 'TerritoryHelperClient.zip'
    destinationDir(file('C:/Development/c-sharp/ExcelNPOI/TerritoryHelperWPFApp/bin/'))
 }
+zipFiles.dependsOn copyFiles
