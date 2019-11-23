@@ -144,8 +144,39 @@ namespace TerritoryHelperWPFApp
 
         }
 
-        
+        private async void MailFreeText_Click(object sender, RoutedEventArgs e)
+        {
+            string message;
+            bool success;
 
+
+            //foreach (string mail in publishersAssignments.Keys)
+            //{
+            //    DataTable territorries = (DataTable)publishersAssignments[mail];
+            //    List<string> territoriesStrings = new List<string>();
+            //    foreach (DataRow row in territorries.Rows)
+            //    {
+            //        territoriesStrings.Add(row[0].ToString());
+            //    }
+            //    MailUtilities mailer = new MailUtilities();
+            //    success = mailer.sendReturnAllTerritoriesMail(mail, territoriesStrings);
+            //
+            //}
+            
+            // Instantiate the dialog box
+            InputDialog dlg = new InputDialog(publishersAssignments);
+            dlg.textArea.Text = "";
+            dlg.Title = "Email Message";
+            dlg.ToolTip = "Entrez le message de votre Email dans ce champ...";
+
+            // Configure the dialog box
+            dlg.Owner = this;
+
+            // Open the dialog box modally 
+            dlg.ShowDialog();
+
+        }
+         
         private async void TerritoriesCardsDownload_Click(object sender, RoutedEventArgs e)
         {
             string exportFormat = TerritoriesFormat.Text;

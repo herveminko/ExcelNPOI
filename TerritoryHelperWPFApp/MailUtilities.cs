@@ -118,6 +118,8 @@ namespace TerritoryHelperWinClient
                 }
                 //mail.IsBodyHtml = true; //Nur wenn Body HTML Quellcode ist 
 
+                //mail.Attachments.Add(new Attachment("C:\\Users\\hcmin\\Desktop\\TerritoryHelperAbigaderClient\\all-territories.kml"));
+
 
                 SmtpClient client = new SmtpClient(SmtpHost, SmtpPortNumber); //SMTP Server von Hotmail und Outlook. 
 
@@ -129,6 +131,75 @@ namespace TerritoryHelperWinClient
                 if (receiverAddress.Contains("@"))
                 {
                     client.Send(mail); //Senden 
+                }
+            }
+            catch (Exception ex)
+            {
+                message = appSettings["mail-sending-error-msg"] + ex.Message;
+
+                boolResult = false;
+            }
+
+            return boolResult;
+
+
+        }
+
+
+        public bool sendFreeTextMail(string receiverAddress, List<string> territoriesDescription, string mailContent)
+        {
+            bool boolResult = true;
+            string message;
+
+
+            try
+            {
+                MailMessage mail = new MailMessage();
+                string territoriesString = "";
+                foreach (string desc in territoriesDescription)
+                {
+                    territoriesString = territoriesString + desc + "\n";
+                }
+
+                string mailSender = appSettings["mail-sender"];
+                string mailPassword = appSettings["mail-password"];
+                string SmtpHost = appSettings["mail-smtp-server"];
+                string SmtpPortNumberString = appSettings["mail-smtp-port"];
+                int SmtpPortNumber;
+                Int32.TryParse(SmtpPortNumberString, out SmtpPortNumber);
+
+                mail.From = new MailAddress(mailSender); //Absender 
+                mail.To.Add(receiverAddress); //Empfänger 
+                mail.Subject = appSettings["mail-subject-free-text"];
+                mail.Body = "Cher proclamateur/Chère proclamatrice,\n\nD'après notre liste tu travailles les territoires:\n\n" +
+                        territoriesString +
+                        "\n\n" + mailContent + 
+                        "\n\n\nMerci d'avance pour ta coopération!! En cas de question, tu es prié(e) de répondre à l'une des adresses Email ci-dessous." +
+                        "\n\nN.B: Tu peux aussi nous contacter directement à la prochaine occasion" +
+                        "\n\n" + appSettings["signature-intro"] +
+                        "\n" + appSettings["signature"];
+
+                if (appSettings["mail-content-add"] != null && appSettings["mail-content-add"].Length > 0)
+                {
+                    mail.Body = mail.Body + "\n\n" + appSettings["mail-content-add"];
+                }
+                //mail.IsBodyHtml = true; //Nur wenn Body HTML Quellcode ist 
+
+                //mail.Attachments.Add(new Attachment("C:\\Users\\hcmin\\Desktop\\TerritoryHelperAbigaderClient\\all-territories.kml"));
+
+
+                SmtpClient client = new SmtpClient(SmtpHost, SmtpPortNumber); //SMTP Server von Hotmail und Outlook. 
+
+
+                client.Credentials = new System.Net.NetworkCredential(mailSender, mailPassword);//Anmeldedaten für den SMTP Server 
+
+                client.EnableSsl = true; //Die meisten Anbieter verlangen eine SSL-Verschlüsselung 
+                //if (!receiverAddress.Contains("@") || receiverAddress.Contains("hcminko"))
+                if (receiverAddress.Contains("@"))
+                {
+                    client.Send(mail); //Senden 
+                    //System.Windows.MessageBoxResult result = System.Windows.MessageBox.Show(mail.Body, "INFO", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+
                 }
             }
             catch (Exception ex)

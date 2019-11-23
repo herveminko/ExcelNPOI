@@ -79,6 +79,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="InputDialog.xaml.cs">
+      <DependentUpon>InputDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MailUtilities.cs" />
     <Compile Include="NPOIExcelUtilities.cs" />
     <Compile Include="Publisher.cs" />
@@ -88,6 +91,10 @@
     <Compile Include="TerritoryHelperFileParser.cs" />
     <Compile Include="TerritoryHelperWebSkeleton.cs" />
     <Compile Include="UiHelper.cs" />
+    <Page Include="InputDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

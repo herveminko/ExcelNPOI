@@ -1,0 +1,17 @@
+﻿<Window x:Class="TerritoryHelperWPFApp.InputDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TerritoryHelperWPFApp"
+        mc:Ignorable="d"
+        Title="InputDialog" Height="450" Width="800">
+    <Grid>        
+        <!-- Accept or Cancel -->
+        <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4">
+            <TextBox Name="textArea" TextWrapping="Wrap" AcceptsReturn="True" Height="350"></TextBox>
+            <Button Name="okButton" Width="80" Height="25" IsDefault="True" Margin="0 5 0 0" Background="#FF7F90FC" Style="{DynamicResource RoundedButton}" Click="OkButton_Click">Envoyer</Button>
+            <Button Name="cancelButton" Width="80" Height="25" IsCancel="True" Margin="0 5 0 0" Background="Red" Style="{DynamicResource RoundedButton}">Annuler</Button>
+        </StackPanel>
+    </Grid >
+</Window>
